@@ -1,2 +1,2 @@
 # RoK-Scanning-Tool
-Python tool to scan and analyze RoK player data
+Python-Tool to scan and analyze RoK player data using LD Player

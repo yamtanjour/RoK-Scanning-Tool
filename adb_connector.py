@@ -18,5 +18,3 @@ def connect_ldplayer_adb():
     else:
         print("❌ Failed to connect ADB.")
 
-if __name__ == "__main__":
-    connect_ldplayer_adb()

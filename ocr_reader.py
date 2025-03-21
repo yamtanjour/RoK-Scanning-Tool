@@ -7,23 +7,6 @@ from PIL import Image  # Cropping images for speed
 reader = easyocr.Reader(['en'])
 
 def detect_value_regions(img_path):
-    """
-    Reads the image and returns a dictionary of bounding boxes for the actual value regions
-    corresponding to the labels "Governor", "Power", and "Kill Points".
-    
-    The function searches for the label text and then takes the bounding box of the next result.
-    Additionally, it saves a cropped screenshot of each detected region for debugging.
-    
-    :param img_path: Path to the image file.
-    :return: Dictionary, e.g.,
-             { "Governor": bbox, "Power": bbox, "Kill Points": bbox }
-             where each bbox is a list of 4 points (each point [x, y] as integers).
-    """
-    import cv2
-    import numpy as np
-    from PIL import Image
-    # Assuming 'reader' is already globally initialized, e.g.:
-    # reader = easyocr.Reader(['en'])
     
     img = cv2.imread(img_path)
     # Use detail=1 to get bounding boxes, text, and confidence values.
@@ -73,14 +56,7 @@ def detect_value_regions(img_path):
 
 
 def extract_values(img_path, regions):
-    """
-    Extracts the Governor Name, Power, and Kill Points from the bounding boxes
-    provided by detect_value_regions().
 
-    :param img_path: Path to the image file.
-    :param regions: Dictionary of bounding boxes with keys "Governor", "Power", and "Kill Points".
-    :return: Tuple (governor_name, power_val, kill_points_val)
-    """
     # Helper function to do the actual cropping and OCR
     def extract_text_from_box(pil_image, box):
         # box is a list of four points: top-left, top-right, bottom-right, bottom-left
