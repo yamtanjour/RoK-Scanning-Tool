@@ -7,6 +7,12 @@ NameList = []
 PowerList = []
 KPList = []
 
+def printstats(i):
+    print("--------------------------------------------------")
+    print(f"Governor: {NameList[i]}")
+    print(f"Power: {PowerList[i]}")
+    print(f"Kill Points: {KPList[i]}")
+    print("--------------------------------------------------")
 
 def capture_profile():
     extract_values("player_profile.png", regions)
@@ -20,30 +26,36 @@ connect_ldplayer_adb()
 
 
 tap(700, 300)
+time.sleep(2)
 take_screenshot()
 regions = detect_value_regions("player_profile.png")
 capture_profile()
 adb_command(f"input tap 50 650")
+printstats(0)
 tap(700, 400)
 take_screenshot()
 capture_profile()
-adb_command(f"input tap 50 650")
+adb_command(f"input tap 50 650")   
+printstats(1)
 tap(700, 500)
 take_screenshot()
 capture_profile()
 adb_command(f"input tap 50 650")
-for i in range(1, 3):
+printstats(2)
+for i in range(3, 297):
     tap(700, 600)
-    time.sleep(1)
     take_screenshot()
     capture_profile()
     adb_command(f"input tap 50 650")
-    print("closing Player")
-    time.sleep(1)
+    printstats(i)
+    if NameList[i] == "N/A" or PowerList[i] == "N/A" or KPList[i] == "N/A":
+        tap(700, 700)
+        time.sleep(1)
+        take_screenshot()
+        capture_profile()
+        adb_command(f"input tap 50 650")
+        printstats(i)
     
 
 for i in range (0, len(NameList)):
-    print(f"Governor: {NameList[i]}")
-    print(f"Power: {PowerList[i]}")
-    print(f"Kill Points: {KPList[i]}")
-    print("--------------------------------------------------")
+    printstats(i)

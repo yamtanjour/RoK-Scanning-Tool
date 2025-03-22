@@ -23,5 +23,4 @@ def take_screenshot(filename="player_profile.png"):
     
     # Pull the screenshot file from the device to local machine
     os.system(f'"{adb_path}" -s localhost:5555 pull /sdcard/screen.png {filename}')
-    print(f"Screenshot saved as: {filename}")
 

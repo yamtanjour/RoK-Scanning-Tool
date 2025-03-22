@@ -8,6 +8,7 @@ reader = easyocr.Reader(['en'])
 
 def detect_value_regions(img_path):
     
+    
     img = cv2.imread(img_path)
     # Use detail=1 to get bounding boxes, text, and confidence values.
     results = reader.readtext(img, detail=1)
@@ -27,7 +28,7 @@ def detect_value_regions(img_path):
 
         # Based on the label found, assign a region from one of the following OCR results.
         # Adjust the index offsets as necessary for your layout.
-        if "civilization" in lower_text and "profile" not in lower_text:
+        if "civilization" in lower_text:
             detected_regions["Governor"] = results[i + 1][0]
         if "power" in lower_text:
             # For example, use the next next result for power.
@@ -86,4 +87,3 @@ def extract_values(img_path, regions):
         kill_points_val = extract_text_from_box(pil_img, regions["Kill Points"])
 
     return governor_name, power_val, kill_points_val
-
