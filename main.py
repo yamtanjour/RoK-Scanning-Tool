@@ -1,11 +1,17 @@
 from navigation import tap, adb_command, take_screenshot
-from ocr_reader import extract_values, detect_value_regions
+from ocr_reader import get_region, get_text
 from adb_connector import connect_ldplayer_adb
 import time
+import easyocr
+import PIL as Image
+import numpy as np
 
 NameList = []
 PowerList = []
 KPList = []
+boxes = [] # [name, power, kill points, T4, T4P, T5, T5P, Deaths]
+
+reader = easyocr.Reader(['en'])
 
 def printstats(i):
     print("--------------------------------------------------")
@@ -14,15 +20,25 @@ def printstats(i):
     print(f"Kill Points: {KPList[i]}")
     print("--------------------------------------------------")
 
-def capture_profile():
-    extract_values("player_profile.png", regions)
-    gov, power, kill = extract_values("player_profile.png", regions)
-    NameList.append(gov)
-    PowerList.append(power)
-    KPList.append(kill)
+def get_regions():
+    img = Image.open("player_profile.png")
+    take_screenshot()
+    results = reader.readtext(img)
+    boxes.append(get_region(img, results, "civilization", 1))
+    boxes.append(get_region(img, results, "power", 3))
+    boxes.append(get_region(img, results, "kill points", 3))
+    tap(1150, 300)
+    take_screenshot()
+    crop = img.crop((850, 320 , 1500, 700))
+    boxes.append(get_region(crop, results, "Kill Statistics", 7))
+    boxes.append(get_region(crop, results, "Kill Statistics", 8))
+    boxes.append(get_region(crop, results, "Kill Statistics", 9))
+    boxes.append(get_region(crop, results, "Kill Statistics", 10))
+    
     
 adb_path = r"C:\LDPlayer\LDPlayer9\adb.exe"
 connect_ldplayer_adb()
+
 
 
 tap(700, 300)

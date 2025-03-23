@@ -6,84 +6,48 @@ from PIL import Image  # Cropping images for speed
 # Global EasyOCR reader
 reader = easyocr.Reader(['en'])
 
-def detect_value_regions(img_path):
+from PIL import Image
+
+def get_region(img_path, ocr_results, anchor_text, offset):
+    """
+    img_path: path to image
+    ocr_results: OCR list from reader.readtext()
+    anchor_text: the string to search for (e.g. 'Kill Statistics')
+    offset: number of items after the anchor to get (e.g. 2)
+    """
+    img = Image.open(img_path)
+
+    # Find the index of the anchor string
+    anchor_index = next(i for i, (_, text, _) in enumerate(ocr_results) if anchor_text.lower() in text.lower())
     
-    
-    img = cv2.imread(img_path)
-    # Use detail=1 to get bounding boxes, text, and confidence values.
-    results = reader.readtext(img, detail=1)
-    print("OCR Results:", results)
-    
-    detected_regions = {}
-    
-    # Loop through the results (make sure there's at least one following result)
-    for i in range(len(results) - 1):
-        # Skip if current result does not have enough items.
-        if len(results[i]) < 3 or len(results[i + 1]) < 1:
-            continue
+    # Calculate target index
+    target_index = anchor_index + offset
+    if not (0 <= target_index < len(ocr_results)):
+        raise IndexError("Offset leads to invalid index.")
 
-        # Use only the first three items (bbox, text, confidence)
-        bbox, detected_text, _ = results[i][:3]
-        lower_text = detected_text.lower()
+    # Get bounding box of the target
+    box = ocr_results[target_index][0]
+    points = [[int(x), int(y)] for x, y in box]
+    x1 = min(p[0] for p in points)
+    y1 = min(p[1] for p in points)
+    x2 = max(p[0] for p in points)
+    y2 = max(p[1] for p in points)
 
-        # Based on the label found, assign a region from one of the following OCR results.
-        # Adjust the index offsets as necessary for your layout.
-        if "civilization" in lower_text:
-            detected_regions["Governor"] = results[i + 1][0]
-        if "power" in lower_text:
-            # For example, use the next next result for power.
-            detected_regions["Power"] = results[i + 3][0]
-        if "kill points" in lower_text:
-            # And maybe two results ahead for kill points.
-            detected_regions["Kill Points"] = results[i + 3][0]
-    
-    # For debugging: open the image with PIL and save cropped regions.
-    debug_img = Image.open(img_path)
-    for key, box in detected_regions.items():
-        # Convert each coordinate to integer values.
-        box_int = [[int(x), int(y)] for x, y in box]
-        # Use the top-left and bottom-right points for cropping.
-        x1, y1 = box_int[0]
-        x2, y2 = box_int[2]
-        cropped = debug_img.crop((x1, y1, x2, y2))
-        debug_filename = f"debug_{key}.png"
-        cropped.save(debug_filename)
-        print(f"Saved debug screenshot for {key} as: {debug_filename}")
-        
-        print(detected_regions)
-    
-    print(detected_regions)
-    return detected_regions
+    cropped = img.crop((x1, y1, x2, y2)).convert("RGB")
+    cropped.save(f"debug_region_from_{anchor_text.replace(' ', '_')}_{offset}.png")
+
+    return box
 
 
-def extract_values(img_path, regions):
+def get_text(img_path, box):
+    img = Image.open(img_path)
 
-    # Helper function to do the actual cropping and OCR
-    def extract_text_from_box(pil_image, box):
-        # box is a list of four points: top-left, top-right, bottom-right, bottom-left
-        x1, y1 = box[0]
-        x2, y2 = box[2]  # bottom-right corner
-        x1 -= 30
-        x2 += 100
-        cropped_img = pil_image.crop((x1, y1, x2, y2))
-        # OCR on the cropped region
-        result = reader.readtext(np.array(cropped_img), detail=0)
-        return result[0] if result else "N/A"
+    x_coords = [p[0] for p in box]
+    y_coords = [p[1] for p in box]
+    x1, x2 = min(x_coords), max(x_coords)
+    y1, y2 = min(y_coords), max(y_coords)
 
-    # Initialize return values
-    governor_name = "N/A"
-    power_val = "N/A"
-    kill_points_val = "N/A"
+    cropped = img.crop((x1, y1, x2, y2))
+    result = reader.readtext(np.array(cropped), detail=0)
 
-    # Open the original image once
-    pil_img = Image.open(img_path)
-
-    # Extract each value if we have its bounding box
-    if "Governor" in regions:
-        governor_name = extract_text_from_box(pil_img, regions["Governor"])
-    if "Power" in regions:
-        power_val = extract_text_from_box(pil_img, regions["Power"])
-    if "Kill Points" in regions:
-        kill_points_val = extract_text_from_box(pil_img, regions["Kill Points"])
-
-    return governor_name, power_val, kill_points_val
+    return result[0] if result else "N/A"

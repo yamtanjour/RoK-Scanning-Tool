@@ -13,7 +13,7 @@ def adb_command(command):
 def tap(x_position, y_position):
     print(f"👆 Tapping on player at X={x_position}, Y={y_position}")
     adb_command(f"input tap {x_position} {y_position}")
-    time.sleep(2)  # Wait for profile to load
+    time.sleep(1)  # Wait for profile to load
 
 
 def take_screenshot(filename="player_profile.png"):
