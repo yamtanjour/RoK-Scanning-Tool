@@ -29,11 +29,16 @@ def get_regions():
     boxes.append(get_region(img, results, "kill points", 3))
     tap(1150, 300)
     take_screenshot()
+    img = Image.open("player_profile.png")
     crop = img.crop((850, 320 , 1500, 700))
+    results = reader.readtext(crop)
     boxes.append(get_region(crop, results, "Kill Statistics", 7))
     boxes.append(get_region(crop, results, "Kill Statistics", 8))
     boxes.append(get_region(crop, results, "Kill Statistics", 9))
     boxes.append(get_region(crop, results, "Kill Statistics", 10))
+    tap(180, 750)
+    take_screenshot()
+    
     
     
 adb_path = r"C:\LDPlayer\LDPlayer9\adb.exe"
