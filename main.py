@@ -1,4 +1,4 @@
-from navigation import tap, adb_command, take_screenshot
+from navigation import tap, take_screenshot
 from ocr_reader import get_region, get_text
 from adb_connector import connect_ldplayer_adb
 import time
@@ -72,24 +72,24 @@ def capture_profile(j):
     time.sleep(1)
     take_screenshot()
     img = Image.open("player_profile.png")
-    crop = img.crop((850, 320, 1500, 700))
-    crop_np = np.array(crop) 
-    T4Kills.append(get_text(crop_np, boxes[3], key="T4Kills"))
-    T4Points.append(get_text(crop_np, boxes[4], key="T4Points"))
-    T5Kills.append(get_text(crop_np, boxes[5], key="T5Kills"))
-    T5Points.append(get_text(crop_np, boxes[6], key="T5Points"))
+    crop = img.crop((850, 320, 1500, 700)) 
+    T4Kills.append(get_text(crop, boxes[3], key="T4Kills"))
+    T4Points.append(get_text(crop, boxes[4], key="T4Points"))
+    T5Kills.append(get_text(crop, boxes[5], key="T5Kills"))
+    T5Points.append(get_text(crop, boxes[6], key="T5Points"))
     tap(180, 750)
     time.sleep(1)
+    take_screenshot()
     img = Image.open("player_profile.png")
     Deaths.append(get_text(img, boxes[7], key="Deaths"))
     tap(50, 650)
     tap(50, 650)
     printstats(j)
     time.sleep(1)
+
+# start of the proram
 adb_path = r"C:\LDPlayer\LDPlayer9\adb.exe"
 connect_ldplayer_adb()
-
-
 
 tap(700, 300)
 time.sleep(2)
@@ -100,7 +100,7 @@ tap(700, 400)
 capture_profile(1)
 tap(700, 500)
 capture_profile(2)
-for i in range(3, 4):
+for i in range(3, 20):
     tap(700, 600)
     capture_profile(i)
     if Names[i] == "N/A" or Power[i] == "N/A" or KillPoints[i] == "N/A":
@@ -108,5 +108,5 @@ for i in range(3, 4):
         time.sleep(1)
         capture_profile()
 
-for i in range (0, len(Names) - 1):
+for i in range (0, len(Names)):
     printstats(i)

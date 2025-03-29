@@ -1,20 +1,12 @@
 import easyocr   # OCR text detection
-import cv2       # Image processing
 import numpy as np
 from PIL import Image  # Cropping images for speed
 
 # Global EasyOCR reader
 reader = easyocr.Reader(['en'])
 
-from PIL import Image
-
 def get_region(img_path_or_obj, ocr_results, anchor_text, offset):
-    """
-    img_path_or_obj: path to image or a Pillow Image object
-    ocr_results: OCR list from reader.readtext()
-    anchor_text: the string to search for (e.g. 'Kill Statistics')
-    offset: number of items after the anchor to get (e.g. 2)
-    """
+
     # Check if img_path_or_obj is a file path or an Image object
     if isinstance(img_path_or_obj, str):
         img = Image.open(img_path_or_obj)
@@ -45,13 +37,7 @@ def get_region(img_path_or_obj, ocr_results, anchor_text, offset):
 
 
 def get_text(img_path_or_obj, box, key="debug"):
-    """
-    Extracts text from a specific region in an image.
-    :param img_path_or_obj: Path to the image file or a Pillow Image object.
-    :param box: Bounding box of the region to extract text from.
-    :param key: Debug key for saving cropped images.
-    :return: Extracted text or "N/A" if no text is found.
-    """
+    
     if isinstance(img_path_or_obj, str):
         img = Image.open(img_path_or_obj)
     else:
