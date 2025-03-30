@@ -5,6 +5,7 @@ import time
 import easyocr
 from PIL import Image
 import numpy as np
+import csv
 
 Names = []
 Power = []
@@ -46,10 +47,10 @@ def get_regions():
     crop = img.crop((850, 320, 1500, 700))
     crop_np = np.array(crop)  # Convert cropped image to numpy array
     results = reader.readtext(crop_np)  # Pass numpy array to readtext()
-    boxes.append(get_region(crop, results, "Kill Statistics", 7))
-    boxes.append(get_region(crop, results, "Kill Statistics", 8))
     boxes.append(get_region(crop, results, "Kill Statistics", 9))
     boxes.append(get_region(crop, results, "Kill Statistics", 10))
+    boxes.append(get_region(crop, results, "Kill Statistics", 11))
+    boxes.append(get_region(crop, results, "Kill Statistics", 12))
     tap(180, 750)
     time.sleep(1)
     take_screenshot()
@@ -106,7 +107,16 @@ for i in range(3, 20):
     if Names[i] == "N/A" or Power[i] == "N/A" or KillPoints[i] == "N/A":
         tap(700, 700)
         time.sleep(1)
-        capture_profile()
+        capture_profile(i)
 
 for i in range (0, len(Names)):
     printstats(i)
+    
+
+rows = zip(Names, Power, KillPoints, T4Kills, T4Points, T5Kills, T5Points, Deaths)
+
+with open('results.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['Player Name', 'Power', 'Kill Points', 'T4 Kills', 'T4 Kill Points', 'T5 Kills', 'T5 Kill Points', 'Deaths'])  # header
+    writer.writerows(rows)
+
