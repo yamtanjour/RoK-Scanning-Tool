@@ -6,6 +6,8 @@ import easyocr
 from PIL import Image
 import numpy as np
 import csv
+import os
+num_players = os.environ.get("NUM_PLAYERS")
 
 Names = []
 Power = []

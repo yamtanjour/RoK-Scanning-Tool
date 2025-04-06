@@ -1,8 +1,8 @@
 import os
-
-def get_ldplayer_adb():
+import os
+def get_ldplayer_adb(adb_path):
     """Finds LDPlayer's built-in ADB."""
-    adb_path = r"C:\LDPlayer\LDPlayer9\adb.exe"  # Adjust path if necessary
+    adb_path = os.environ.get("ADB_PATH") # Adjust path if necessary
     if os.path.exists(adb_path):
         print(f"✅ Found ADB at: {adb_path}")
         return adb_path
