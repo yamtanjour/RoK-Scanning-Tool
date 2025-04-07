@@ -91,7 +91,6 @@ def capture_profile(j):
     time.sleep(1)
 
 # start of the proram
-adb_path = r"C:\LDPlayer\LDPlayer9\adb.exe"
 connect_ldplayer_adb()
 
 tap(700, 300)
@@ -103,7 +102,7 @@ tap(700, 400)
 capture_profile(1)
 tap(700, 500)
 capture_profile(2)
-for i in range(3, 20):
+for i in range(3, num_players - 1):
     tap(700, 600)
     capture_profile(i)
     if Names[i] == "N/A" or Power[i] == "N/A" or KillPoints[i] == "N/A":
