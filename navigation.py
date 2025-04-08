@@ -9,7 +9,7 @@ def adb_command(command):
     time.sleep(1)
 
 def tap(x_position, y_position):
-    print(f"👆 Tapping on player at X={x_position}, Y={y_position}")
+    print(f"Tapping on player at X={x_position}, Y={y_position}")
     adb_command(f"input tap {x_position} {y_position}")
     time.sleep(1)
 

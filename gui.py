@@ -68,7 +68,7 @@ input_path_var = tk.StringVar(value="C:\\LDPlayer\\LDPlayer9\\adb.exe")
 input_path = tk.Entry(root, width=50, textvariable=input_path_var)
 input_path.pack(pady=5)
 
-tk.Label(root, text="Num. of Players:", fg=FG_COLOR, bg=BG_COLOR).pack()
+tk.Label(root, text="Num. of Players: (min. 4)", fg=FG_COLOR, bg=BG_COLOR).pack()
 input_num_var = tk.StringVar(value="300")
 input_num = tk.Entry(root, width=50, textvariable=input_num_var)
 input_num.pack(pady=5)
