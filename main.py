@@ -7,7 +7,11 @@ from PIL import Image
 import numpy as np
 import csv
 import os
+import sys
 num_players = os.environ.get("NUM_PLAYERS")
+
+sys.stdout.reconfigure(line_buffering=True)
+
 
 Names = []
 Power = []
