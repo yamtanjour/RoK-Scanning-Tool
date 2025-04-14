@@ -12,6 +12,7 @@ num_players = os.environ.get("NUM_PLAYERS")
 
 sys.stdout.reconfigure(line_buffering=True)
 
+PlayerList = {}
 
 Names = []
 Power = []
@@ -72,8 +73,8 @@ def capture_profile(j):
     global Names, Power, KillPoints, T4Kills, T4Points, T5Kills, T5Points, Deaths
     take_screenshot()
     img = Image.open("player_profile.png")
-    Names.append(get_text(img, boxes[0]))
-    Power.append(get_text(img, boxes[1]))
+    Names.append(get_text(img, boxes[0], key="Name"))
+    Power.append(get_text(img, boxes[1]),key="Power")
     KillPoints.append(get_text(img, boxes[2]))
     tap(1150, 300)
     time.sleep(1)
