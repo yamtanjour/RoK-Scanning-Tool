@@ -12,7 +12,7 @@ num_players = os.environ.get("NUM_PLAYERS")
 
 sys.stdout.reconfigure(line_buffering=True)
 
-PlayerList = {}
+PlayerList = []
 
 Names = []
 Power = []
@@ -28,14 +28,15 @@ boxes = [] # [name, power, kill points, T4, T4P, T5, T5P, Deaths]
 reader = easyocr.Reader(['en'])
 
 def printstats(i):
+    global PlayerList
     print("--------------------------------------------------")
-    print(f"Governor: {Names[i]}")
-    print(f"Power: {Power[i]}")
-    print(f"Kill Points: {KillPoints[i]}")
-    print(f"T4 Kills: {T4Kills[i]}")
-    print(f"T4 Points: {T4Points[i]}")
-    print(f"T5 Kills: {T5Kills[i]}")
-    print(f"T5 Points: {T5Points[i]}")
+    print(f"Governor: {PlayerList[i][0]}")
+    print(f"Power: {Power[i][1]}")
+    print(f"Kill Points: {KillPoints[i][2]}")
+    print(f"T4 Kills: {T4Kills[i][3]}")
+    print(f"T4 Points: {T4Points[i][4]}")
+    print(f"T5 Kills: {T5Kills[i][5]}")
+    print(f"T5 Points: {T5Points[i][6]}")
     print(f"Deaths: {Deaths[i]}")
     print("--------------------------------------------------")
 
@@ -70,21 +71,22 @@ def get_regions():
 
 
 def capture_profile(j):
+    Values = []
     global Names, Power, KillPoints, T4Kills, T4Points, T5Kills, T5Points, Deaths
     take_screenshot()
     img = Image.open("player_profile.png")
-    Names.append(get_text(img, boxes[0], key="Name"))
-    Power.append(get_text(img, boxes[1]),key="Power")
-    KillPoints.append(get_text(img, boxes[2]))
+    Values.append(get_text(img, boxes[0], key="Name"))
+    Values.append(get_text(img, boxes[1]),key="Power")
+    Values.append(get_text(img, boxes[2]))
     tap(1150, 300)
     time.sleep(1)
     take_screenshot()
     img = Image.open("player_profile.png")
     crop = img.crop((850, 320, 1500, 700)) 
-    T4Kills.append(get_text(crop, boxes[3], key="T4Kills"))
-    T4Points.append(get_text(crop, boxes[4], key="T4Points"))
-    T5Kills.append(get_text(crop, boxes[5], key="T5Kills"))
-    T5Points.append(get_text(crop, boxes[6], key="T5Points"))
+    Values.append(get_text(crop, boxes[3], key="T4Kills"))
+    Values.append(get_text(crop, boxes[4], key="T4Points"))
+    Values.append(get_text(crop, boxes[5], key="T5Kills"))
+    Values.append(get_text(crop, boxes[6], key="T5Points"))
     tap(180, 750)
     time.sleep(1)
     take_screenshot()
@@ -92,6 +94,7 @@ def capture_profile(j):
     Deaths.append(get_text(img, boxes[7], key="Deaths"))
     tap(50, 650)
     tap(50, 650)
+    PlayerList[j] = Values
     printstats(j)
     time.sleep(1)
 
@@ -121,6 +124,8 @@ for i in range (0, len(Names)):
 
 rows = zip(Names, Power, KillPoints, T4Kills, T4Points, T5Kills, T5Points, Deaths)
 
+
+#needs to be fixed
 with open('results.csv', 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Player Name', 'Power', 'Kill Points', 'T4 Kills', 'T4 Kill Points', 'T5 Kills', 'T5 Kill Points', 'Deaths'])  # header
