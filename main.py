@@ -37,7 +37,7 @@ def printstats(i):
     print(f"T4 Points: {T4Points[i][4]}")
     print(f"T5 Kills: {T5Kills[i][5]}")
     print(f"T5 Points: {T5Points[i][6]}")
-    print(f"Deaths: {Deaths[i]}")
+    print(f"Deaths: {Deaths[i][7]}")
     print("--------------------------------------------------")
 
 def get_regions():

@@ -64,7 +64,7 @@ tk.Label(root, text="RoK Scanning Tool", font=("Helvetica", 18, "bold"), fg=FG_C
 
 # ---------- ENTRIES ----------
 tk.Label(root, text="ADB Path:", fg=FG_COLOR, bg=BG_COLOR).pack()
-input_path_var = tk.StringVar(value="C:\\LDPlayer\\LDPlayer9\\adb.exe")
+input_path_var = tk.StringVar(value="C:\\Program Files\\BlueStacks_nxt\\HD-Adb.exe")
 input_path = tk.Entry(root, width=50, textvariable=input_path_var)
 input_path.pack(pady=5)
 
