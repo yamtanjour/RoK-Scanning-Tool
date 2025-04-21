@@ -31,13 +31,13 @@ def printstats(i):
     global PlayerList
     print("--------------------------------------------------")
     print(f"Governor: {PlayerList[i][0]}")
-    print(f"Power: {Power[i][1]}")
-    print(f"Kill Points: {KillPoints[i][2]}")
-    print(f"T4 Kills: {T4Kills[i][3]}")
-    print(f"T4 Points: {T4Points[i][4]}")
-    print(f"T5 Kills: {T5Kills[i][5]}")
-    print(f"T5 Points: {T5Points[i][6]}")
-    print(f"Deaths: {Deaths[i][7]}")
+    print(f"Power: {PlayerList[i][1]}")
+    print(f"Kill Points: {PlayerList[i][2]}")
+    print(f"T4 Kills: {PlayerList[i][3]}")
+    print(f"T4 Points: {PlayerList[i][4]}")
+    print(f"T5 Kills: {PlayerList[i][5]}")
+    print(f"T5 Points: {PlayerList[i][6]}")
+    print(f"Deaths: {PlayerList[i][7]}")
     print("--------------------------------------------------")
 
 def get_regions():
@@ -98,7 +98,7 @@ def capture_profile(j):
     printstats(j)
     time.sleep(1)
 
-# start of the proram
+# start of the program
 connect_ldplayer_adb()
 
 tap(700, 300)
@@ -122,12 +122,8 @@ for i in range (0, len(Names)):
     printstats(i)
     
 
-rows = zip(Names, Power, KillPoints, T4Kills, T4Points, T5Kills, T5Points, Deaths)
-
-
-#needs to be fixed
-with open('results.csv', 'w', newline='', encoding='utf-8') as csvfile:
+with open("PlayerList.csv", "w", newline="") as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(['Player Name', 'Power', 'Kill Points', 'T4 Kills', 'T4 Kill Points', 'T5 Kills', 'T5 Kill Points', 'Deaths'])  # header
-    writer.writerows(rows)
-
+    writer.writerow(["Name", "Power", "Kill Points", "T4 Kills", "T4 Points", "T5 Kills", "T5 Points", "Deaths"])
+    for player in PlayerList:
+        writer.writerow(player)
