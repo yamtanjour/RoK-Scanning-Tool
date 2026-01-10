@@ -1,6 +1,6 @@
 RoK-Scanning-Tool
 
-Hey there! This is a Python tool I built to scan and analyze data from Rise of Kingdoms using LD Player or BlueStacks. Basically, it grabs in-game screenshots, reads the text with OCR, and tracks the stats of players in the kingdom.
+This is a Python tool built to scan and analyze data from Rise of Kingdoms using LD Player or BlueStacks. Basically, it grabs in-game screenshots, reads the text with OCR, and tracks the stats of players in the kingdom.
 
 What It Does
 
